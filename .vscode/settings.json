@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd /home/c113118212/API_key_Portal/frontend && npm run dev$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
