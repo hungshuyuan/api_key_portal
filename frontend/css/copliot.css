@@ -1,0 +1,140 @@
+/* ==============================================
+   Copliot Style Overrides
+   ============================================== */
+
+/* Locomotive Scroll Requirements */
+html.has-scroll-smooth {
+    overflow: hidden;
+}
+
+html.has-scroll-dragging {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.has-scroll-smooth body {
+    overflow: hidden;
+}
+
+/* Background blob overrides specific to this page */
+.bg-wrapper {
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+}
+
+/* Custom styling for the layout cards representing VSCode steps */
+.tutorial-info-card h2 {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Image wrappers for placeholder adjustments */
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    border: 1px dashed rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    text-align: center;
+    padding: 20px;
+}
+
+.tutorial-page .code-window pre[class*="language-"],
+.tutorial-page .code-window pre[class*="language-"] > code,
+.tutorial-page .code-window code,
+.tutorial-page .code-window code[class*="language-"] {
+    background: transparent !important;
+    color: inherit !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', Menlo, Monaco, 'Courier New', monospace !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+    letter-spacing: 0 !important;
+    tab-size: 4 !important;
+    -webkit-font-smoothing: antialiased !important;
+    font-feature-settings: 'liga' 1, 'calt' 0 !important;
+    font-weight: 400 !important;
+}
+
+.tutorial-page .code-window pre[class*="language-"] code {
+    background: transparent !important;
+    display: block;
+}
+
+/* ==============================================
+   Layout Width Expansion
+   ============================================== */
+.tutorial-hero,
+.tutorial-section,
+.tutorial-footer {
+    width: min(1500px, 100%) !important;
+    max-width: 1500px;
+}
+
+/* ==============================================
+   Timeline Styles
+   ============================================== */
+.timeline-container {
+    position: relative;
+    margin-top: 60px;
+    padding: 20px 0;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, rgba(246, 171, 0, 0) 0%, rgba(246, 171, 0, 0.5) 15%, rgba(0, 109, 173, 0.5) 85%, rgba(0, 109, 173, 0) 100%);
+    z-index: 0;
+}
+
+.timeline-step {
+    position: relative;
+    margin-bottom: 80px;
+}
+
+.timeline-step::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #0d1117;
+    border: 4px solid var(--color-amber);
+    box-shadow: 0 0 15px rgba(246, 171, 0, 0.6);
+    z-index: 2;
+}
+
+/* When the gap between columns changes on mobile */
+@media (max-width: 900px) {
+    .timeline-container::before {
+        left: 20px;
+    }
+    
+    .timeline-step::after {
+        left: 20px;
+        top: 0;
+        transform: translate(-50%, -20px);
+    }
+}
