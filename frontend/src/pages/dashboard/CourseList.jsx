@@ -296,7 +296,8 @@ function CourseList() {
     <div className="page-container" style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', backgroundColor: '#f9fafb' }}>
       
       {/* 頂部標頭與提示控制 */}
-      <div className="page-header page-header-with-controls" style={{ padding: '20px 20px 0 20px' }}>
+      <div className="page-header page-header-with-controls" 
+     style={{ padding: '20px 20px 0 20px', backgroundColor: '#f9fafb', color: '#111827' }}>
         <div>
           <h1>課程控制台</h1>
           <p className="page-subtitle">切換下拉選單切換課程，並使用下方分頁完成管理工作。</p>
@@ -304,7 +305,7 @@ function CourseList() {
       </div>
 
       {/* 控制面板：整合下拉選單與 Tabs 按鈕 */}
-      <div className="course-control-panel" style={{ padding: '0 20px' }}>
+      <div className="course-control-panel" style={{ padding: '0 20px', backgroundColor: '#f9fafb' }}>
         <div className="field-group">
           <label htmlFor="course-select">選擇課程</label>
           <select

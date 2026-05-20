@@ -17,14 +17,7 @@
 }
 
 /* 深色模式 */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-light: #111827;
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --border-color: #374151;
-  }
-}
+
 
 /* ========================================
    系統布局容器
@@ -47,7 +40,7 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: var(--bg-light);
+  background-color: #f9fafb;
 }
 
 .content-inner {

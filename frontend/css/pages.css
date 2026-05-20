@@ -23,23 +23,28 @@
 }
 
 /* 深色模式支持 */
+/* 請在 pages.css 找到這段，並補上下面那三行 */
 @media (prefers-color-scheme: dark) {
   .page-content {
     background-color: var(--bg-dark);
     color: var(--text-primary);
   }
 
-  .profile-card {
+  /* 補這個：讓 page-header 在深色模式有深色背景 */
+  .page-header,
+  .page-header-with-controls {
     background-color: var(--bg-dark);
   }
 
-  .form-section {
-    background-color: var(--bg-dark);
+  .page-header h1,
+  .section-header h2,
+  .page-subtitle {
+    color: var(--text-primary);
   }
 
-  .settings-section {
-    background-color: var(--bg-dark);
-  }
+  .profile-card { background-color: var(--bg-dark); }
+  .form-section { background-color: var(--bg-dark); }
+  .settings-section { background-color: var(--bg-dark); }
 }
 
 /* ========================================
