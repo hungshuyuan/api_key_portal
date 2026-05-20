@@ -73,7 +73,7 @@ const Home = () => {
             <div className="gs-actions" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
               {user ? (
                 <button 
-                  onClick={() => navigate('/api-system')} 
+                  onClick={() => navigate('/app/course')} 
                   className="gs-btn primary"
                   style={{ cursor: 'pointer', border: 'none' }}
                 >

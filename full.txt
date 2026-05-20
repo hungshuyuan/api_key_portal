@@ -215,16 +215,21 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
-    # 2. 導向後端 (FastAPI)
-    location /api {
-        # 如果你的 FastAPI 路由沒有寫 /api 前綴，請加上下面這行 rewrite
-        # rewrite ^/api/(.*)$ /$1 break; 
-
-        proxy_pass http://127.0.0.1:8000;
+    # =========================
+    # 後端 API 代理 (轉交給 Node.js)
+    # =========================
+    location /portal/api/ {
+        # ✅ 已修正：對齊您實際的 5000 埠與 API 路由
+        proxy_pass http://127.0.0.1:5000/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
+        # ✅ 補上安全與真實 IP 標頭，讓後端能正確辨識來源
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
     }
 }
 

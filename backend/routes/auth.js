@@ -15,15 +15,16 @@ const userSessions = new Map();
  */
 router.post('/google', async (req, res, next) => {
   try {
-    const { id_token } = req.body;
+    const { Token, id_token } = req.body;
+    const tokenToVerify = Token || id_token;
 
-    if (!id_token) {
-      return res.status(400).json({ error: 'Missing id_token' });
+    if (!tokenToVerify) {
+      return res.status(400).json({ error: 'Missing Token or id_token' });
     }
 
     // Verify Google token
     const ticket = await googleClient.verifyIdToken({
-      idToken: id_token,
+      idToken: tokenToVerify,
       audience: process.env.GOOGLE_CLIENT_ID
     });
 
@@ -44,20 +45,24 @@ router.post('/google', async (req, res, next) => {
     userSessions.set(userId, {
       ...user,
       loginAt: new Date(),
-      idToken: id_token
+      idToken: tokenToVerify
     });
 
     // Generate JWT token for optional use
     const token = jwt.sign(
-      { userId, email: payload.email },
+      { student_id: userId, email: payload.email,name: payload.name },
       process.env.JWT_SECRET || 'dev-secret',
       { expiresIn: '7d' }
     );
 
+    req.session.jwtToken = token;
+
     res.json({
       success: true,
       user,
-      token
+      access_token: token,
+      token,
+      student_id: userId
     });
   } catch (error) {
     console.error('Google token verification error:', error);
@@ -75,11 +80,15 @@ router.post('/google', async (req, res, next) => {
 router.get('/session', (req, res) => {
   if (req.session.userId && req.session.user) {
     res.json({
-      user: req.session.user
+      user: req.session.user,
+      access_token: req.session.jwtToken || null,
+      token: req.session.jwtToken || null
     });
   } else {
     res.json({
-      user: null
+      user: null,
+      access_token: null,
+      token: null
     });
   }
 });
@@ -118,6 +127,30 @@ router.post('/logout', (req, res, next) => {
 /**
  * Middleware: 驗證是否已登入
  */
+export const getJwtFromRequest = (req) => {
+  const authHeader = req.headers.authorization || req.headers.Authorization || '';
+  if (authHeader.startsWith('Bearer ')) return authHeader.slice(7);
+  return req.session?.jwtToken || null;
+};
+
+export const verifyJwtToken = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET || 'dev-secret');
+};
+
+export const requireJwtAuth = (req, res, next) => {
+  const token = getJwtFromRequest(req);
+  if (!token) {
+    return res.status(401).json({ error: 'Missing Authorization header' });
+  }
+
+  try {
+    req.user = verifyJwtToken(token); 
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+};
+
 export const requireAuth = (req, res, next) => {
   if (!req.session.userId) {
     return res.status(401).json({ error: 'Unauthorized' });
@@ -129,9 +162,13 @@ export const requireAuth = (req, res, next) => {
  * GET /api/auth/user (protected)
  * 取得當前使用者資訊
  */
-router.get('/user', requireAuth, (req, res) => {
+router.get('/user', requireJwtAuth, (req, res) => {
   res.json({
-    user: req.session.user
+    user: {
+      student_id: req.user.student_id, // 這裡也改成 req.user
+      email: req.user.email,
+      name: req.user.name
+    }
   });
 });
 

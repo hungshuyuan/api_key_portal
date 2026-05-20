@@ -1,0 +1,211 @@
+/* ========================================
+   頂部導航欄樣式
+   ======================================== */
+
+.system-topbar {
+  height: var(--topbar-height);
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: color var(--transition-duration) ease;
+}
+
+.menu-toggle:hover {
+  color: var(--primary-color);
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 1px;
+  transition: all var(--transition-duration) ease;
+}
+
+.menu-toggle:hover .hamburger span {
+  background-color: var(--primary-color);
+}
+
+.topbar-center {
+  flex: 1;
+  text-align: center;
+}
+
+.topbar-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* ========================================
+   用戶下拉菜單
+   ======================================== */
+
+.user-dropdown {
+  position: relative;
+}
+
+.user-avatar-topbar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform var(--transition-duration) ease;
+  border: 2px solid transparent;
+}
+
+.user-avatar-topbar:hover {
+  transform: scale(1.05);
+  border-color: var(--primary-color);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  min-width: 220px;
+  margin-top: 8px;
+  display: none;
+  z-index: 100;
+}
+
+.user-dropdown:hover .dropdown-menu,
+.user-dropdown:focus-within .dropdown-menu {
+  display: block;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dropdown-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  font-size: 14px;
+}
+
+.dropdown-email {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-divider {
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: background-color var(--transition-duration) ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--bg-light);
+}
+
+.logout-item {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.logout-item:hover {
+  background-color: #fee2e2;
+}
+
+/* ========================================
+   響應式設計
+   ======================================== */
+
+@media (max-width: 768px) {
+  .system-topbar {
+    padding: 0 16px;
+  }
+
+  .topbar-title {
+    font-size: 16px;
+  }
+
+  .topbar-center {
+    display: none;
+  }
+
+  .user-dropdown {
+    flex: 1;
+  }
+
+  .user-avatar-topbar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dropdown-menu {
+    min-width: 200px;
+  }
+}

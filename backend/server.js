@@ -4,11 +4,13 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import authRoutes from './routes/auth.js';
+import keyRoutes from './routes/keys.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+import courseRoutes from './routes/courses.js';
 
 // Middleware
 const getOriginFromEnv = (env) => {
@@ -67,7 +69,8 @@ app.get(['/api/health', '/portal/api/health'], (req, res) => {
 // Support both /api/auth and /auth and the /portal-prefixed variants because some
 // reverse proxies or nginx rewrites can add/remove the /portal prefix.
 app.use(['/api/auth', '/auth', '/portal/api/auth', '/portal/auth'], authRoutes);
-
+app.use('/api/keys', keyRoutes);
+app.use('/api/courses', courseRoutes);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);

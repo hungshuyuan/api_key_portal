@@ -7,6 +7,11 @@
     --transition-speed: 1s;
 }
 
+html {
+    min-height: 100%;
+    background: #131315;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -16,10 +21,10 @@
 }
 
 body {
-    background: #04060a;
-    color: white;
+    background: #131315;
+    color: #111827;
     overflow-x: hidden;
-    min-height: 150vh;
+    min-height: 100vh;
 }
 
 /* Locomotive Scroll 基礎修正 */

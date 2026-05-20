@@ -1,0 +1,187 @@
+/* ========================================
+   後台頁面通用樣式
+   ======================================== */
+
+/* 在 system.css 中已定義頁面容器相關樣式 */
+/* 此文件用於頁面特定的額外樣式 */
+
+/* 響應式表格 */
+@media (max-width: 768px) {
+  .data-table {
+    font-size: 13px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 12px 8px;
+  }
+
+  .btn-sm {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .page-content {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+  }
+
+  .profile-card {
+    background-color: var(--bg-dark);
+  }
+
+  .form-section {
+    background-color: var(--bg-dark);
+  }
+
+  .settings-section {
+    background-color: var(--bg-dark);
+  }
+}
+
+/* ========================================
+   CourseList 新增樣式
+   ======================================== */
+
+.page-header-with-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page-subtitle {
+  margin: 8px 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.course-control-panel {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin: 24px 0;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 240px;
+}
+
+.field-group label {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.select-control {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: #ffffff;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease;
+}
+
+.select-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
+}
+
+.function-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  border: 1px solid var(--border-color);
+  background-color: #ffffff;
+  color: var(--text-primary);
+  padding: 12px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.tab-button:hover,
+.tab-button.active {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: rgba(79, 70, 229, 0.08);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.placeholder-panel {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+}
+
+.placeholder-panel h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.placeholder-panel p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.table-scroll-wrapper {
+  max-height: 600px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: #ffffff;
+}
+
+.table-scroll-wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+
+.table-scroll-wrapper::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.table-scroll-wrapper::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 999px;
+}
+
+@media (max-width: 768px) {
+  .course-control-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

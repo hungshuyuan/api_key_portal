@@ -3,6 +3,10 @@
         "/^cd /home/c113118212/API_key_Portal/frontend && npm run dev$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^cd /home/c113118212/API_key_Portal/backend && /usr/bin/sqlite3 管理學院_courses\\.db \"SELECT name FROM sqlite_master WHERE type='table' AND name='student_keys';\"$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'; 
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import LocomotiveScroll from 'locomotive-scroll';
 import 'locomotive-scroll/dist/locomotive-scroll.css';
 import { getScrollInstance, setScrollInstance } from './scrollManager';
@@ -10,7 +10,7 @@ import '../css/style.css';
 const NAVBAR_SCROLL_THRESHOLD = 150;
 const EASING = [0.25, 0.0, 0.35, 1.0];
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const scrollContainerRef = useRef(null);
   const dialogRef = useRef(null); // 👈 新增：用於控制原生對話框的 Ref
   const location = useLocation();
@@ -211,7 +211,7 @@ const Layout = ({ children }) => {
             )}
             
             {user ? (
-              <button className="nav-cta" type="button" onClick={() => navigate('/copliot')}>
+              <button className="nav-cta" type="button" onClick={() => navigate('/app/course')}>
                 前往系統
               </button>
             ) : (
@@ -232,7 +232,7 @@ const Layout = ({ children }) => {
       </div>
 
       <div data-scroll-container id="main-scroll" ref={scrollContainerRef}>
-        {children}
+        <Outlet />
       </div>
 
       {/* ======================================================== */}
