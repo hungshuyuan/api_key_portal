@@ -9,6 +9,8 @@ import Copliot from './Copliot';
 import Model from './Model';
 import Tutorial from './Tutorial';
 
+import Check from './Check';
+
 // Dashboard 後台組件
 import SystemLayout from './layouts/SystemLayout';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -18,26 +20,23 @@ import DashboardProfile from './pages/dashboard/Profile';
 import DashboardSettings from './pages/dashboard/Settings';
 
 function App() {
-  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
-  if (!googleClientId) {
-    console.error("找不到 Google Client ID，請檢查 .env 設定！");
-  }
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
   return (
     <GoogleOAuthProvider clientId={googleClientId}>
-      <AuthProvider>
-        <Router basename="/portal">
+      {/* 🟢 這些 Router 與 AuthProvider 一定要打開，否則 Context 會丟失 */}
+      <Router basename="/portal">
+        <AuthProvider>
           <Routes>
-            {/* ========== 前台 Portal 區 ========== */}
+            {/* 1. 公開頁面 */}
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="/copliot" element={<Copliot />} />
               <Route path="/model" element={<Model />} />
               <Route path="/tutorial" element={<Tutorial />} />
             </Route>
-
-            {/* ========== 後台 Dashboard 區 ========== */}
+            <Route path="/check" element={<Check />} /> 
+            {/* 2. 受保護頁面 (一定要寫在 AuthProvider 裡面) */}
             <Route
               element={
                 <ProtectedRoute>
@@ -47,19 +46,12 @@ function App() {
             >
               <Route path="/app/course" element={<CourseList />} />
               <Route path="/app/apikey" element={<ApiKeyManager />} />
-              <Route path="/app/profile" element={<DashboardProfile />} />
-              <Route path="/app/settings" element={<DashboardSettings />} />
+              {/* ... 其他路由 */}
             </Route>
-
-            {/* 404 路由 */}
-            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </Router>
-      </AuthProvider>
+        </AuthProvider>
+      </Router>
     </GoogleOAuthProvider>
   );
 }
-
 export default App;
-
-  

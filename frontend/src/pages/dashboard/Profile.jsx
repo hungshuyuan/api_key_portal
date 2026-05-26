@@ -8,10 +8,16 @@ import '../../../css/pages.css';
 function DashboardProfile() {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+
+  // 🌟 1. 先安全地把學院跟系所組合起來 (例如："管理學院 資訊管理系")
+  const fullDepartmentName = user?.ad_audit_info?.department 
+    ? `${user.ad_audit_info.college || ''} ${user.ad_audit_info.department}`.trim()
+    : '未提供系所資料';
+
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
-    department: '人工智能學院',
+    department: fullDepartmentName, 
     phone: '',
   });
 
@@ -68,7 +74,7 @@ function DashboardProfile() {
                 />
               </div>
               <div className="form-group">
-                <label>所屬系所</label>
+                <label>所屬系院</label>
                 <input 
                   type="text" 
                   name="department"

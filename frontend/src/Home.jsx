@@ -1,14 +1,16 @@
-import { useState } from 'react'; // 新增 useState 來控制彈窗
-import { Link, useNavigate } from 'react-router-dom'; 
-import { GoogleLogin } from '@react-oauth/google'; 
+import { useState } from 'react';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from './AuthProvider';
 import startImg from '../img/start.png';
 
 const Home = () => {
   const { user, handleGoogleSuccess } = useAuth();
   const navigate = useNavigate();
-  
-  // 控制登入彈出視窗的狀態
+
+  const context = useOutletContext();
+  const openLoginModal = context?.openLoginModal || (() => console.warn('無法呼叫彈窗'));
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -20,7 +22,6 @@ const Home = () => {
             高科iAI——GPU資源服務轉型與AI智慧校園建置計畫，致力於打造全校普惠的AI智慧校園，提供學生、教師和研究人員便捷的GPU資源服務，推動AI技術在教育和研究中的廣泛應用。
           </p>
         </div>
-
         <div id="scroll-down-btn" className="scroll-down fade-in delay-3">Scroll</div>
       </section>
 
@@ -68,28 +69,25 @@ const Home = () => {
               <li>第二步：使用openai格式向API發起請求。</li>
               <li>第三步：獲得結果。</li>
             </ul>
-            
-            {/* 核心修改區域：更漂亮的按鈕整合 */}
+
             <div className="gs-actions" style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
               {user ? (
-                <button 
-                  onClick={() => navigate('/app/course')} 
+                <button
+                  onClick={() => navigate('/app/course')}
                   className="gs-btn primary"
                   style={{ cursor: 'pointer', border: 'none' }}
                 >
                   進入 API 申請系統
                 </button>
               ) : (
-                // 未登入狀態：不再直接顯示大大的 Google 按鈕，而是顯示符合你 UI 的標準按鈕
-                <button 
-                  onClick={() => setIsModalOpen(true)} 
+                <button
+                  onClick={() => setIsModalOpen(true)}
                   className="gs-btn primary"
                   style={{ cursor: 'pointer', border: 'none' }}
                 >
                   登入以開始使用
                 </button>
               )}
-              
               <Link to="/tutorial" className="gs-btn secondary">觀看完整圖文設定教學 &rarr;</Link>
             </div>
           </div>
@@ -114,28 +112,25 @@ const Home = () => {
 
           <div className="resource-grid">
             <Link to="/copliot" className="resource-card accent-blue" style={{ textDecoration: 'none' }}>
-              <span className="resource-tag">AI CODING</span>
+              <span className="resource-tag" style={{ color: 'white' }}>AI CODING</span>
               <h3>AI coding 應用範例教學</h3>
               <p>設定 API Key、安裝延伸模組、直接在編輯器中串接模型。</p>
               <span className="resource-link">進入教學 →</span>
             </Link>
-
             <a className="resource-card accent-amber" href="#">
-              <span className="resource-tag">OpenWebUI</span>
+              <span className="resource-tag" style={{ color: 'white' }}>OpenWebUI</span>
               <h3>自建ChatGPT應用教學，寫作協助、創意生圖一把罩</h3>
               <p>透過聊天式介面快速開始，寫作協助、生成圖像。</p>
               <span className="resource-link">前往教學 →</span>
             </a>
-
             <a className="resource-card accent-cyan" href="#">
-              <span className="resource-tag">Status</span>
+              <span className="resource-tag" style={{ color: 'white' }}>Status</span>
               <h3>查看服務狀態</h3>
               <p>即時掌握資源運作情形、排程與維護公告，避免中斷時誤判。</p>
               <span className="resource-link">查看狀態 →</span>
             </a>
-
             <a className="resource-card accent-white" href="#">
-              <span className="resource-tag">News</span>
+              <span className="resource-tag" style={{ color: 'white' }}>News</span>
               <h3>閱讀公告與更新</h3>
               <p>掌握新模型上線、使用規範調整與最新操作說明。</p>
               <span className="resource-link">前往公告中心 →</span>
@@ -150,21 +145,17 @@ const Home = () => {
             <div className="footer-brand">高科 iAI</div>
             <p>Nkust API server | Next Gen AI</p>
           </div>
-
           <div className="footer-links">
             <a href="#getting-started">如何開始</a>
             <a href="#resources">資源連結</a>
             <a href="#resources">服務入口</a>
             <a href="#resources">公告中心</a>
           </div>
-
           <p className="footer-note">打造全校普惠 AI 體驗。</p>
         </div>
       </footer>
 
-      {/* ======================================================== */}
-      {/* 全新高質感 Google 登入彈出視窗 (Modal)                     */}
-      {/* ======================================================== */}
+      {/* Google 登入 Modal */}
       {isModalOpen && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -176,9 +167,8 @@ const Home = () => {
             borderRadius: '16px', position: 'relative', width: '90%', maxWidth: '380px',
             textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
           }}>
-            {/* 關閉視窗按鈕 */}
-            <button 
-              onClick={() => setIsModalOpen(false)} 
+            <button
+              onClick={() => setIsModalOpen(false)}
               style={{
                 position: 'absolute', top: '15px', right: '15px', background: 'none',
                 border: 'none', color: '#a1a1aa', cursor: 'pointer', fontSize: '18px'
@@ -186,22 +176,24 @@ const Home = () => {
             >
               ✕
             </button>
-            
-            {/* 標題與形象 */}
+
             <div style={{ marginBottom: '25px' }}>
               <h2 style={{ color: '#fff', fontSize: '22px', fontWeight: 'bold', margin: '0 0 8px 0' }}>歡迎使用高科 iAI</h2>
               <p style={{ color: '#71717a', fontSize: '14px', margin: 0 }}>請使用學校的 Google 帳號驗證身分</p>
             </div>
-            
-            {/* 真正的 Google 登入組件 */}
+
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-              <GoogleLogin 
-                onSuccess={(credentialResponse) => {
-                  handleGoogleSuccess(credentialResponse);
-                  setIsModalOpen(false); // 登入成功後自動關閉彈窗
-                }}
+              <GoogleLogin
+                onSuccess={async (credentialResponse) => {
+                console.log('1. onSuccess 觸發');
+                await handleGoogleSuccess(credentialResponse);
+                console.log('2. handleGoogleSuccess 完成');
+                setIsModalOpen(false);
+                console.log('3. Modal 關閉');
+                navigate('/check');
+                console.log('4. navigate 執行完');
+              }}
                 onError={() => console.error('Google 登入失敗')}
-                ux_mode="redirect"
               />
             </div>
           </div>

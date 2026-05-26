@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model api_keys {
+  id                Int     @id @default(autoincrement())
+  student_id        String? @db.VarChar(50)
+  key_alias         String? @db.VarChar(255)
+  encrypted_raw_key String? @db.VarChar(255)
+  users             users?  @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([id], map: "ix_api_keys_id")
+  @@index([key_alias], map: "ix_api_keys_key_alias")
+  @@index([student_id], map: "ix_api_keys_student_id")
+}
+
+model course_enrollments {
+  id        Int      @id @default(autoincrement())
+  course_id Int?
+  user_id   String?  @db.VarChar(36)
+  courses   courses? @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users     users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([course_id, user_id])
+}
+
+model courses {
+  id                 Int                  @id @default(autoincrement())
+  college            String?              @db.VarChar(100)
+  academic_year      String?              @db.VarChar(20)
+  semester           String?              @db.VarChar(20)
+  course_code        String?              @db.VarChar(50)
+  course_name        String               @db.VarChar(255)
+  teacher            String?              @db.VarChar(100)
+  course_enrollments course_enrollments[]
+}
+
+model users {
+  id                 String               @id @db.VarChar(36)
+  name               String               @db.VarChar(255)
+  email              String               @unique @db.VarChar(255)
+  student_id         String               @unique @db.VarChar(50)
+  agreed_at          DateTime?            @db.Timestamp(6)
+  tos_agreed         Int?                 @default(0) @db.SmallInt
+  role               String?              @db.VarChar(50)  // 例如：'學生' 或 '老師'
+  department         String?              @db.VarChar(100) // 例如：'資訊管理系'
+  college            String?              @db.VarChar(100) // 例如：'管理學院'
+  full_identity      String?              @db.VarChar(100) // 例如：'日間部學生'
+  api_keys           api_keys[]
+  course_enrollments course_enrollments[]
+}

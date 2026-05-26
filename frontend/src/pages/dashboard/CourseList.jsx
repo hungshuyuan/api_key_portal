@@ -5,7 +5,7 @@ import '../../../css/pages.css';
 
 // 1. 後端 API 基礎網址設定
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://www.iai.nkust.edu.tw/iaibackend';
-
+// const API_BASE_URL = 'https://nkustapikey.54ucl.com';
 const FUNCTION_TABS = [
   { key: 'course-management', label: '課程管理' },
   { key: 'upload-roster', label: '上傳修課名單' },
@@ -40,7 +40,7 @@ function CourseList() {
   const { accessToken, token } = useAuth(); 
   
   const currentToken = accessToken || token || localStorage.getItem('access_token');
-  console.log("🔍 目前準備發送的 Token 是:", currentToken);
+  // console.log("🔍 目前準備發送的 Token 是:", currentToken);
   const authHeaders = currentToken ? { 'Authorization': `Bearer ${currentToken}` } : {};
 
   // ==========================================

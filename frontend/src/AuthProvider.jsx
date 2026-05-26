@@ -1,18 +1,18 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-// 🌟 1. 補上後端 API 基礎網址設定 (與 CourseList.jsx 保持一致)
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://www.iai.nkust.edu.tw/iaibackend';// 注意：如果您有使用 Vite proxy，這行可以不用，但看起來您的專案是跨 Port 運作的。
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://www.iai.nkust.edu.tw/iaibackend';
 
 const AuthContext = createContext({
   user: null,
   accessToken: null,
   loading: true,
   handleGoogleSuccess: () => {},
-  logout: () => {}
+  logout: () => {},
+  refreshUserStatus: () => {} // 🌟 新增：允許元件強制更新用戶狀態
 });
 
-// 解析 JWT 的輔助函式
-const decodeJwt = (token) => { /*...保持不變...*/ 
+// ... (decodeJwt 與 buildUserProfile 函式保持不變) ...
+const decodeJwt = (token) => {
   if (!token) return null;
   try {
     const base64Url = token.split('.')[1];
@@ -21,22 +21,22 @@ const decodeJwt = (token) => { /*...保持不變...*/
       atob(base64).split('').map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
     );
     return JSON.parse(jsonPayload);
-  } catch (error) {
-    return null;
-  }
+  } catch (error) { return null; }
 };
 
-const getUserRoleFromEmail = (email) => { /*...保持不變...*/ 
-  if (!email) return '老師';
-  const localPart = email.split('@')[0] || '';
-  return /^[A-Za-z]\d{9}$/.test(localPart) ? '學生' : '老師';
-};
-
-const buildUserProfile = (data) => { /*...保持不變...*/ 
+const buildUserProfile = (data) => {
   if (!data) return null;
   const email = data.email || '';
   return {
-    id: data.id || '', email, name: data.name || email || '使用者', picture: data.picture || '', role: getUserRoleFromEmail(email)
+    id: data.id || data.student_id || '',
+    email,
+    name: data.name || email || '使用者',
+    student_id: data.student_id || email.split('@')[0],
+    picture: data.picture || '',
+    nkust_account: data.nkust_account || data.account || email.split('@')[0],
+    ad_audit_info: data.ad_audit_info || null,
+    role: data.ad_audit_info?.role ? data.ad_audit_info.role : '未知',
+    tos_agreed: data.tos_agreed ?? false
   };
 };
 
@@ -46,8 +46,23 @@ export const AuthProvider = ({ children }) => {
     try { return localStorage.getItem('access_token'); } catch (e) { return null; }
   });
   const [loading, setLoading] = useState(true);
-  
-  // 🌟 2. 修正：加上 API_BASE_URL
+
+  // 🌟 新增：從後端同步最新 User 資料 (用於 Check.jsx 同意條款後)
+  const refreshUserStatus = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/me`, { credentials: 'include' });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.logged_in && data.user) {
+          setUser(buildUserProfile(data.user));
+        }
+      }
+    } catch (err) {
+      console.error("重新整理使用者狀態失敗:", err);
+    }
+  };
+
+  // ... (validateIdToken, logout, loadSession 保持不變) ...
   const validateIdToken = async (idToken) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
@@ -56,100 +71,55 @@ export const AuthProvider = ({ children }) => {
         credentials: 'include',
         body: JSON.stringify({ Token: idToken, id_token: idToken })
       });
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`Google token validation failed: ${text}`);
-      }
+      if (!response.ok) throw new Error(await response.text());
       return await response.json();
-    } catch (error) {
-      console.error('❌ 後端驗證失敗:', error);
-      return null;
-    }
+    } catch (error) { return null; }
   };
 
-  // 🌟 3. 修正：加上 API_BASE_URL
   const logout = async () => {
-    try {
-      await fetch(`${API_BASE_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
-    } catch (error) {
-      console.warn('Logout request failed', error);
-    } finally {
-      setUser(null);
-      setAccessToken(null);
-      localStorage.removeItem('access_token');
-    }
+    try { await fetch(`${API_BASE_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' }); } 
+    catch (error) { console.warn('Logout failed', error); } 
+    finally { setUser(null); setAccessToken(null); localStorage.removeItem('access_token'); }
   };
 
-  // 🌟 4. 修正：加上 API_BASE_URL
   const loadSession = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/session`, { credentials: 'include' });
       if (!response.ok) return null;
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        return await response.json();
-      }
-      return null;
-    } catch (error) {
-      return null;
-    }
+      return await response.json();
+    } catch (error) { return null; }
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
     if (!credentialResponse?.credential) return;
-
     setLoading(true);
     const sessionData = await validateIdToken(credentialResponse.credential);
-    
-    // 🔍 顯影劑：看看後端到底回傳了什麼
-    console.log("📥 後端核發登入結果:", sessionData);
-
     const tokenFromServer = sessionData?.access_token || sessionData?.token;
-    
-    // 🌟 5. 阻斷假性登入：如果後端沒有給 Token，就不允許登入！
     if (tokenFromServer) {
       setAccessToken(tokenFromServer);
       localStorage.setItem('access_token', tokenFromServer);
       setUser(buildUserProfile(sessionData.user));
-      console.log("✅ 成功存入 Token:", tokenFromServer.substring(0, 15) + "...");
-    } else {
-      console.error("🚨 嚴重錯誤：前端拿不到後端的 Token！登入失敗。");
-      alert("伺服器連線異常或無法核發憑證，請稍後再試！");
-      // 這裡不可以再用 else if (payload) 去 faking user 了！
     }
-    
     setLoading(false);
   };
 
-  // 網頁初次載入檢查
   useEffect(() => {
     const restoreSession = async () => {
       setLoading(true);
-      const storedToken = localStorage.getItem('access_token');
-      if (storedToken) {
-        const payload = decodeJwt(storedToken);
-        if (payload) {
-          setAccessToken(storedToken);
-          setUser(buildUserProfile(payload));
-          setLoading(false);
-          return;
-        }
-      }
       const session = await loadSession();
-      const sessionToken = session?.access_token || session?.token;
-      if (sessionToken) {
-        setAccessToken(sessionToken);
-        localStorage.setItem('access_token', sessionToken);
-        if (session?.user) setUser(buildUserProfile(session.user));
+      if (session?.user) {
+        setUser(buildUserProfile(session.user));
+      } else {
+        // 若 Session 過期，嘗試移除 token
+        localStorage.removeItem('access_token');
       }
       setLoading(false);
     };
-
     restoreSession();
   }, []);
 
   const value = useMemo(
-    () => ({ user, accessToken, loading, handleGoogleSuccess, logout }),
+    () => ({ user, accessToken, loading, handleGoogleSuccess, logout, refreshUserStatus }),
     [user, accessToken, loading]
   );
 

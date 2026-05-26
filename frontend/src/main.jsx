@@ -8,10 +8,10 @@ import { AuthProvider } from './AuthProvider';
 // 2. 透過 Vite 的環境變數安全讀取 Client ID
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-console.log("=== 檢查環境變數 ===");
-console.log("原始字串:", GOOGLE_CLIENT_ID);
-console.log("字串長度:", GOOGLE_CLIENT_ID?.length); 
-console.log("有沒有包含空白?", GOOGLE_CLIENT_ID?.includes(" "));
+// console.log("=== 檢查環境變數 ===");
+// console.log("原始字串:", GOOGLE_CLIENT_ID);
+// console.log("字串長度:", GOOGLE_CLIENT_ID?.length); 
+// console.log("有沒有包含空白?", GOOGLE_CLIENT_ID?.includes(" "));
 
 if (!GOOGLE_CLIENT_ID) {
   console.warn("警告: 找不到 VITE_GOOGLE_CLIENT_ID，請確認 .env 檔案設定。");

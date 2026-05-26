@@ -110,7 +110,7 @@ const Tutorial = () => {
                   </div>
                   <strong>Terminal</strong>
                 </div>
-                <pre><code className="language-bash">{`curl -X POST https://api.example.com/v1/chat/completions \\
+                <pre><code className="language-bash">{`curl -X POST https://www.iai.nkust.edu.tw/aihub/v1/chat/completions \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -161,7 +161,7 @@ const Tutorial = () => {
           <div className="tutorial-section-heading">
             <p className="tutorial-section-label">03 內容區塊</p>
             <h2>同一頁可以混合不同元件，不需要每段都長得一樣</h2>
-            <p>
+            <p style={{ color: 'white' }}>
               這裡示範三種不同的卡片風格：資訊卡、步驟卡和備註卡。它們共享同一套版面語言，
               但視覺比例、背景與內容重點各自不同。
             </p>
