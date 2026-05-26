@@ -18,13 +18,13 @@ function Sidebar({ isOpen, isMobile, onClose }) {
 
   // 菜單配置
   const menuConfig = useMemo(() => [
-    {
+/*     {
       id: 'course',
       label: '課程管理',
       // icon: '📚',
       path: '/app/course',
       roles: ['老師', '學生'], // 誰可以看到
-    },
+    }, */
     {
       id: 'apikey',
       label: 'API 金鑰',
@@ -32,13 +32,13 @@ function Sidebar({ isOpen, isMobile, onClose }) {
       path: '/app/apikey',
       roles: ['老師', '學生'],
     },
-    {
-      id: 'profile',
-      label: '個人資料',
-      // icon: '👤',
-      path: '/app/profile',
-      roles: ['老師', '學生'],
-    },
+    // {
+    //   id: 'profile',
+    //   label: '個人資料',
+    //   // icon: '👤',
+    //   path: '/app/profile',
+    //   roles: ['老師', '學生'],
+    // },
     {
       id: 'settings',
       label: '系統設定',
@@ -94,7 +94,6 @@ function SidebarContent({ isOpen, menus, onMenuClick, user }) {
       {/* Logo 區 */}
       <div className="sidebar-header">
         <div className="sidebar-logo">
-          <span className="logo-icon">🎓</span>
           {isOpen && <span className="logo-text">IAI系統</span>}
         </div>
       </div>

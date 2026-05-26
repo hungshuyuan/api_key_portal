@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../AuthProvider';
 
 // ✅ 與 Check.jsx 相同的白名單與判斷邏輯
-const ALLOWED_STUDENT_IDS = ['C113118212', 'F114118119'];
+const ALLOWED_STUDENT_IDS = ['C113118212', 'F114118119', 'C111118243'];
 
 const hasAccess = (user) => {
     if (!user) return false;

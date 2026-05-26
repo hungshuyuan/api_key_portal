@@ -80,6 +80,16 @@
   position: relative;
 }
 
+.user-avatar-trigger {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .user-avatar-topbar {
   width: 40px;
   height: 40px;
@@ -109,8 +119,7 @@
   z-index: 100;
 }
 
-.user-dropdown:hover .dropdown-menu,
-.user-dropdown:focus-within .dropdown-menu {
+.user-dropdown.open .dropdown-menu {
   display: block;
   animation: slideDown 0.2s ease;
 }

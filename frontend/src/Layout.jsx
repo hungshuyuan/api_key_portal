@@ -247,7 +247,7 @@ const Layout = () => {
         <button 
           onClick={() => {
             setIsMobileMenuOpen(false); // 1. 收起手機版選單
-            navigate('/app/course');    // 2. 已登入，跳轉至系統
+            navigate('/app/apikey');    // 2. 已登入，跳轉至系統
           }} 
           style={{ 
             display: 'block', width: '100%', textAlign: 'left', 
