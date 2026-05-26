@@ -42,7 +42,6 @@ export default function Check() {
             navigate('/app/course');
         } else {
             alert('您的帳號目前尚未開放iAI系統存取權限。\n如有疑問請洽電子計算機中心。\n按下確認登出');
-            // 直接呼叫後端登出 + 清除前端狀態
             await logout();
             navigate('/');
         }

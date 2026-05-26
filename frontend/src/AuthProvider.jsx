@@ -30,8 +30,7 @@ const buildUserProfile = (data) => {
   return {
     id: data.id || data.student_id || '',
     email,
-    name: data.name || email || '使用者',
-    student_id: data.student_id || email.split('@')[0],
+    name: data.ad_audit_info?.name || data.name || email || '使用者',    student_id: data.student_id || email.split('@')[0],
     picture: data.picture || '',
     nkust_account: data.nkust_account || data.account || email.split('@')[0],
     ad_audit_info: data.ad_audit_info || null,

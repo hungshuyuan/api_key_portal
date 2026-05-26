@@ -46,6 +46,7 @@ function App() {
             >
               <Route path="/app/course" element={<CourseList />} />
               <Route path="/app/apikey" element={<ApiKeyManager />} />
+              <Route path="/app/profile" element={<DashboardProfile />} />
               {/* ... 其他路由 */}
             </Route>
           </Routes>
