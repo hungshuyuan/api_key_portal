@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth, API_BASE_URL } from './AuthProvider';
 
 // ✅ 白名單與權限判斷（寫死在這裡）
-const ALLOWED_STUDENT_IDS = ['C113118212', 'F114118119'];
+const ALLOWED_STUDENT_IDS = ['C113118212', 'F114118119','C111118243'];
 
 const hasAccess = (user) => {
     if (!user) return false;
@@ -37,11 +37,13 @@ export default function Check() {
     };
 
     // ✅ 統一的放行函式，加入權限判斷
-    const proceedToDashboard = (userToCheck) => {
+    const proceedToDashboard = async (userToCheck) => {
         if (hasAccess(userToCheck)) {
             navigate('/app/course');
         } else {
-            alert('您的帳號目前尚未開放後台存取權限。\n如有疑問請洽電子計算機中心。');
+            alert('您的帳號目前尚未開放iAI系統存取權限。\n如有疑問請洽電子計算機中心。\n按下確認登出');
+            // 直接呼叫後端登出 + 清除前端狀態
+            await logout();
             navigate('/');
         }
     };
