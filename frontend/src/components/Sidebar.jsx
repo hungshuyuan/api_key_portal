@@ -39,13 +39,13 @@ function Sidebar({ isOpen, isMobile, onClose }) {
     //   path: '/app/profile',
     //   roles: ['老師', '學生'],
     // },
-    {
-      id: 'settings',
-      label: '系統設定',
-      // icon: '⚙️',
-      path: '/app/settings',
-      roles: ['老師'], // 只有老師可見
-    },
+    // {
+    //   id: 'settings',
+    //   label: '系統設定',
+    //   // icon: '⚙️',
+    //   path: '/app/settings',
+    //   roles: ['老師'], // 只有老師可見
+    // },
   ], []);
 
   // 根據用戶角色過濾菜單
